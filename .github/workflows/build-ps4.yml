@@ -1,0 +1,32 @@
+name: PS4 Remote Build Service
+
+on:
+  repository_dispatch:
+    types: [build-request]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+      
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Build Environment
+        run: |
+          echo "Preparing Linux compilation environment..."
+          sudo apt-get update && sudo apt-get install -y build-essential clang lld
+
+      - name: Compile Code (Mock Build)
+        run: |
+          echo "Compiling C source to PS4 binary format..."
+          mkdir -p output/sce_sys
+          # هنا يتم بناء ملف الـ eboot.bin التجريبي بناءً على الأكواد المرسلة
+          echo "Compiled binary placeholder" > output/eboot.bin
+
+      - name: Package Output Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ps4-homebrew-pkg
+          path: output/
